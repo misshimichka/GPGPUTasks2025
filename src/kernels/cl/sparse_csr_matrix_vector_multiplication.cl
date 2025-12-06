@@ -22,21 +22,26 @@ sparse_csr_matrix_vector_multiplication(
 
     __local uint local_mem[GROUP_SIZE];
 
-    uint offset = offsets[group_index];
-    uint next_offset = offsets[group_index + 1];
-
-    if (local_index + offset >= next_offset) {
+    if (group_index >= nrows) {
         local_mem[local_index] = 0;
     } else {
-        local_mem[local_index] = values[local_index + offset] * vector_values[columns[local_index + offset]];
-    }
-    barrier(CLK_LOCAL_MEM_FENCE);
+        uint offset = offsets[group_index];
+        uint next_offset = offsets[group_index + 1];
 
-    if (local_index == 0) {
-        int sum = 0;
-        for (uint j = 0; j < GROUP_SIZE; j++) {
-            sum += local_mem[j];
+        if (local_index + offset >= next_offset) {
+            local_mem[local_index] = 0;
+        } else {
+            local_mem[local_index] = values[local_index + offset] * vector_values[columns[local_index + offset]];
         }
-        atomic_add(&output[group_index], sum);
+
+        barrier(CLK_LOCAL_MEM_FENCE);
+
+        if (local_index == 0) {
+            int sum = 0;
+            for (uint j = 0; j < GROUP_SIZE; j++) {
+                sum += local_mem[j];
+            }
+            atomic_add(&output[group_index], sum);
+        }
     }
 }
