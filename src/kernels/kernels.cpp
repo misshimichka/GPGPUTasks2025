@@ -1,6 +1,7 @@
 #include "kernels.h"
 
 #include "cl/generated_kernels/aplusb.h"
+#include "cl/generated_kernels/fill_buffer.h"
 #include "cl/generated_kernels/sparse_csr_matrix_vector_multiplication.h"
 
 #include "vk/generated_kernels/aplusb_comp.h"
@@ -14,7 +15,7 @@ void aplusb(const gpu::WorkSize& workSize,
     // dummy implementation if CUDA_SUPPORT is disabled
     rassert(false, 54623523412413);
 }
-void sparse_csr_matrix_vector_multiplication(const gpu::WorkSize &workSize)
+void sparse_csr_matrix_vector_multiplication(const gpu::WorkSize& workSize)
 {
     // dummy implementation if CUDA_SUPPORT is disabled
     rassert(false, 54623523412413);
@@ -31,6 +32,11 @@ const ocl::ProgramBinaries& getAplusB()
 const ProgramBinaries& getSparseCSRMatrixVectorMult()
 {
     return opencl_binaries_sparse_csr_matrix_vector_multiplication;
+}
+
+const ProgramBinaries& getFillBuffer()
+{
+    return opencl_binaries_fill_buffer;
 }
 } // namespace ocl
 
