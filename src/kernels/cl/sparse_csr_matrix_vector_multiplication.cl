@@ -23,10 +23,7 @@ sparse_csr_matrix_vector_multiplication(
     __local uint local_mem[GROUP_SIZE];
 
     uint offset = offsets[group_index];
-    uint next_offset = nnz;
-    if (group_index < nrows - 1) {
-        next_offset = offsets[group_index + 1];
-    }
+    uint next_offset = offsets[group_index + 1];
 
     if (local_index + offset >= next_offset) {
         local_mem[local_index] = 0;
