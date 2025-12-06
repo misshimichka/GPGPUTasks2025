@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-    - name: Delete unnecessary tools folder
+    - name: Delete huge unnecessary tools folder
       run: rm -rf /opt/hostedtoolcache
 
     - uses: actions/checkout@v2
